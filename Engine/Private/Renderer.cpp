@@ -746,6 +746,8 @@ HRESULT CRenderer::Render_SSAOBlurX()
 	if (FAILED(m_pTarget_Manager->End_MRT()))
 		return E_FAIL;
 
+
+
 	return S_OK;
 }
 
@@ -779,6 +781,7 @@ HRESULT CRenderer::Render_SSAOBlurY()
 
 	if (FAILED(m_pTarget_Manager->End_MRT()))
 		return E_FAIL;
+
 
 
 	return S_OK;
