@@ -52,7 +52,8 @@ public: /*for Object_Manager*/
     class CGameObject*          Get_GameObject(_uint iLevelIndex, const _tchar * pLayerTag, _uint iIndex = 0);
     list<class CGameObject*>*   Get_GameObjects(_uint iLevelIndex, const _tchar * pLayerTag);
     HRESULT		                Add_Prototype(const _tchar * pPrototypeTag, class CGameObject* pPrototype);
-    HRESULT		                Add_GameObject(_uint iLevelIndex, const _tchar * pLayerTag, const _tchar * pPrototypeTag, void* pArg = nullptr);
+    HRESULT		                Add_GameObject(_uint iLevelIndex, const _tchar * pLayerTag, const _tchar * pPrototypeTag, void* pArg = nullptr, _bool isKeep = false);
+    HRESULT		                Add_GameObject(_uint iLevelIndex, const _tchar * pLayerTag, class CGameObject* pGameObject, _bool isKeep = false);
     class CGameObject*          Clone_GameObject(const _tchar * pPrototypeTag, void* pArg);
     void                        Clear_Layer(_uint iLevelIndex, const _tchar * pLayerTag);
 

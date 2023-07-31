@@ -15,6 +15,7 @@
 #include "Player_Battle_Ult_Frame.h"
 #include "Player_Battle_Combo.h"
 #include "Player_Battle_Ult_Effect.h"
+#include "ColliderManager.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -76,6 +77,8 @@ void CLevel_GamePlay::Tick(_double dTimeDelta)
 {
     __super::Tick(dTimeDelta);
 
+    CColliderManager::GetInstance()->Check_Collider(LEVEL_GAMEPLAY, dTimeDelta);
+
     SetWindowText(g_hWnd, TEXT("Tuto"));
 
     if (GetKeyState(VK_RETURN) & 0x8000)
@@ -117,11 +120,18 @@ HRESULT CLevel_GamePlay::Ready_Lights()
     LightDesc.vLightAmbient     = _float4(1.f, 1.f, 1.f, 1.f);
     LightDesc.vLightSpecular    = _float4(1.f, 1.f, 1.f, 1.f);
 
-    if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
+    static _uint i = 0;
+
+    if (i == 0)
     {
-        MSG_BOX("Failed to Add_GameObject : Direction_Light");
-        return E_FAIL;
+        if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
+        {
+            MSG_BOX("Failed to Add_GameObject : Direction_Light");
+            return E_FAIL;
+        }
     }
+
+    ++i;
 
     Safe_Release(pGameInstance);
 

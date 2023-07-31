@@ -200,7 +200,7 @@ PS_OUT  PS_Main(PS_IN _In)
 	Out.vDiffuse = vMtrlDiffuse;
 	Out.vDiffuse.a = 1.f;
 	Out.vNormal = vector(_In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(_In.vProjPos.w / 300.f, _In.vProjPos.z / _In.vProjPos.w, 0.f, 0.f);
+	Out.vDepth = vector(_In.vProjPos.w / 1.f, _In.vProjPos.z / _In.vProjPos.w, 0.f, 0.f);
 	//(뷰 스페이스의 z, 투영 스페이스의 z, 0.f, 0.f)
 
 	return Out;
@@ -233,8 +233,8 @@ PS_OUT  PS_Outline(PS_IN In)
 
 	// In.vNormal xyz각각이 -1 ~ 1
 	// Out.vNormal 저장받을 수 있는 xyz각각 0 ~ 1
-	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(In.vProjPos.w / 300.f, In.vProjPos.z / In.vProjPos.w, 0.f, 0.f);
+	//Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
+	//Out.vDepth = vector(In.vProjPos.w / 300, In.vProjPos.z / In.vProjPos.w, 0.f, 0.f);
 
 	return Out;
 }
@@ -295,7 +295,7 @@ technique11 DefaultTechnique
 	{
 		SetRasterizerState(RS_Default);
 		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-		SetDepthStencilState(DS_None_ZEnable, 0);
+		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 0);
 
 		VertexShader = compile vs_5_0 VS_MAIN_SHADOW();
 		GeometryShader = NULL;

@@ -43,9 +43,11 @@ HRESULT CAnimCharacter_Tool::Initialize(void* pArg)
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
+
 	
 	
 	
+		//여기서 
 		char szFullPath[MAX_PATH] = { "" };
 		//★ 수정 필요
 		strcpy_s(szFullPath, "../../Client/Bin/Resources/AnimToolBin/Akaza.bin");
@@ -135,8 +137,6 @@ HRESULT CAnimCharacter_Tool::Render()
 
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
-
-	
 
 	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
 

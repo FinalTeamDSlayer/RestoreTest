@@ -6,6 +6,7 @@ matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 float4		g_vCamPosition;
 
 texture2D	g_DiffuseTexture;
+texture2D   g_NormalTexture;
 texture2D	g_RampTexture;
 
 float		g_fFar = 300.f;
@@ -89,6 +90,30 @@ PS_OUT  PS_Main(PS_IN _In)
 	return Out;
 };
 
+PS_OUT  PS_TEST(PS_IN _In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	vector	vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, _In.vTexUV);
+	
+	vector	vNormalDesc = g_NormalTexture.Sample(LinearSampler, _In.vTexUV);
+
+	float3	vNormal = vNormalDesc.xyz * 2.f - 1.f;
+
+	float3x3	WorldMatrix = float3x3(_In.vTangent.xyz, _In.vBinormal.xyz, _In.vNormal.xyz);
+
+	vNormal = mul(vNormal, WorldMatrix);
+
+	Out.vDiffuse = vMtrlDiffuse;
+
+	// In.vNormal xyz각각이 -1 ~ 1
+	// Out.vNormal 저장받을 수 있는 xyz각각 0 ~ 1
+	Out.vNormal = vector(vNormal * 0.5f + 0.5f, 0.f);
+	Out.vDepth = vector(_In.vProjPos.w / 300.f, _In.vProjPos.z / _In.vProjPos.w, 0.f, 0.f);
+
+	return Out;
+};
+
 PS_NONDEFERRED  PS_Blend(PS_IN _In)
 {
 	PS_NONDEFERRED	Out = (PS_NONDEFERRED)0;
@@ -111,7 +136,6 @@ PS_OUT  PS_Ramp(PS_IN _In)
 	float fRamp = vMtrlDiffuse.r;
 	float2 vGradientUV = float2(fRamp, _In.vTexUV.y);
 	vector vMtrlRamp = g_RampTexture.Sample(LinearSampler, vGradientUV);
-
 
 	if (vMtrlDiffuse.a < 0.9f)
 		discard;
@@ -137,6 +161,19 @@ technique11 DefaultTechnique
 		HullShader = NULL;
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_Main();
+	}
+
+	pass General2
+	{
+		SetRasterizerState(RS_Default);
+		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+
+		VertexShader = compile vs_5_0 VS_Main();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_TEST();
 	}
 
 	pass Blend

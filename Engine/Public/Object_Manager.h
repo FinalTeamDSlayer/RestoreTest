@@ -18,7 +18,8 @@ public:
 public:
 	HRESULT		Reserve_Containers(_uint iNumLevels);
 	HRESULT		Add_Prototype(const _tchar* pPrototypeTag, class CGameObject* pPrototype);
-	HRESULT		Add_GameObject(_uint iLevelIndex, const _tchar* pLayerTag, const _tchar* pPrototypeTag, void* pArg);
+	HRESULT		Add_GameObject(_uint iLevelIndex, const _tchar* pLayerTag, const _tchar* pPrototypeTag, void* pArg, _bool isKeep);
+	HRESULT		Add_GameObject(_uint iLevelIndex, const _tchar* pLayerTag, class CGameObject* pGameObject, _bool isKeep);
 	class CGameObject* Clone_GameObject(const _tchar* pPrototypeTag, void* pArg);
 	void		Clear_Layer(_uint iLevelIndex, const _tchar* pLayerTag);
 

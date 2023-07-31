@@ -63,6 +63,7 @@ VS_OUT VS_GRASS(VS_IN In)
 
 	matrix		matWV = mul(g_WorldMatrix, g_ViewMatrix);
 	matrix		matWVP = mul(matWV, g_ProjMatrix);
+	
 
 	vLocalPosition.x += vLocalPosition.y * g_fTimeDelta * 0.1f;
 	vLocalPosition.z += vLocalPosition.y * g_fTimeDelta * 0.1f;

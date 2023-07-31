@@ -1,21 +1,21 @@
 #include "pch.h"
-#include "..\Public\Player.h"
+#include "..\Public\Monster.h"
 
 #include "GameInstance.h"
 #include "SoundMgr.h"
 #include "Camera_Free.h"
 
-CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CMonster::CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
 {
 }
 
-CPlayer::CPlayer(const CPlayer& rhs)
+CMonster::CMonster(const CMonster& rhs)
 	: CCharacter(rhs)
 {
 }
 
-HRESULT CPlayer::Initialize_Prototype()
+HRESULT CMonster::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -23,7 +23,7 @@ HRESULT CPlayer::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CPlayer::Initialize(void* pArg)
+HRESULT CMonster::Initialize(void* pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
@@ -34,7 +34,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 	return S_OK;
 }
 
-void CPlayer::Tick(_double dTimeDelta)
+void CMonster::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
@@ -45,26 +45,26 @@ void CPlayer::Tick(_double dTimeDelta)
 
 }
 
-void CPlayer::LateTick(_double dTimeDelta)
+void CMonster::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
 
-	
+
 }
 
-HRESULT CPlayer::Render()
+HRESULT CMonster::Render()
 {
 
 	return S_OK;
 }
 
-HRESULT CPlayer::Render_ShadowDepth()
+HRESULT CMonster::Render_ShadowDepth()
 {
 
 	return S_OK;
 }
 
-void CPlayer::Dir_Setting(_bool Reverse)
+void CMonster::Dir_Setting(_bool Reverse)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -135,27 +135,13 @@ void CPlayer::Dir_Setting(_bool Reverse)
 	Safe_Release(pGameInstance);
 }
 
-void CPlayer::Trigger_Hit(_double dTimeDelta)
-{
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-	
-	//임시 히트
-	if (pGameInstance->Get_DIKeyDown(DIK_Z))
-	{
-		m_Moveset.m_Down_Dmg_Small = true;
-	}
-
-	Safe_Release(pGameInstance);
-}
-
-void CPlayer::Key_Input(_double dTimeDelta)
+void CMonster::Key_Input(_double dTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
 #pragma region Test
-	if (pGameInstance->Get_DIKeyState(DIK_HOME) & 0x80)
+	/*if (pGameInstance->Get_DIKeyState(DIK_HOME) & 0x80)
 	{
 		++m_iNumAnim;
 		if (m_pModelCom->Get_NumAnims() <= m_iNumAnim)
@@ -170,19 +156,10 @@ void CPlayer::Key_Input(_double dTimeDelta)
 		if (0 > m_iNumAnim)
 			m_iNumAnim = 0;
 		m_pModelCom->Set_Animation(m_iNumAnim);
-	}
-
-	if (pGameInstance->Get_DIKeyDown(DIK_V))
-	{
-		m_isSpecialHit = true;
-	}
+	}*/
 	//m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), -dTimeDelta);
 #pragma endregion
 
-	Trigger_Hit(dTimeDelta);
-
-	if (m_Moveset.m_isHitMotion == false)
-	{
 	Key_Input_Battle_Move(dTimeDelta);
 
 	Key_Input_Battle_Jump(dTimeDelta);
@@ -197,20 +174,16 @@ void CPlayer::Key_Input(_double dTimeDelta)
 
 	Key_Input_Battle_Dash(dTimeDelta);
 
-		Key_Input_Battle_Awaken(dTimeDelta);
 
-		Key_Input_Battle_Special(dTimeDelta);
-
-	}
 	Safe_Release(pGameInstance);
 }
 
-void CPlayer::Key_Input_Battle_Move(_double dTimeDelta)
+void CMonster::Key_Input_Battle_Move(_double dTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	
+
 	//무브키를 누르고 있는 상태
 	if (pGameInstance->Get_DIKeyState(DIK_W) || pGameInstance->Get_DIKeyState(DIK_S)
 		|| pGameInstance->Get_DIKeyState(DIK_A) || pGameInstance->Get_DIKeyState(DIK_D))
@@ -224,7 +197,7 @@ void CPlayer::Key_Input_Battle_Move(_double dTimeDelta)
 	}
 
 	Dir_Setting(false);
-	
+
 
 	//키를 누를 시
 	if (!m_isCool_MoveKey)
@@ -232,7 +205,7 @@ void CPlayer::Key_Input_Battle_Move(_double dTimeDelta)
 		if (pGameInstance->Get_DIKeyDown(DIK_W) || pGameInstance->Get_DIKeyDown(DIK_S)
 			|| pGameInstance->Get_DIKeyDown(DIK_A) || pGameInstance->Get_DIKeyDown(DIK_D))
 		{
-			if(m_Moveset.m_isRestrict_Move == false)
+			if (m_Moveset.m_isRestrict_Move == false)
 				m_Moveset.m_Down_Battle_Run = true;
 		}
 	}
@@ -241,7 +214,7 @@ void CPlayer::Key_Input_Battle_Move(_double dTimeDelta)
 	if (pGameInstance->Get_DIKeyUp(DIK_W) || pGameInstance->Get_DIKeyUp(DIK_S)
 		|| pGameInstance->Get_DIKeyUp(DIK_A) || pGameInstance->Get_DIKeyUp(DIK_D))
 	{
-		if(m_Moveset.m_isRestrict_Charge == false )
+		if (m_Moveset.m_isRestrict_Charge == false)
 			m_isCool_MoveKey = true;
 	}
 
@@ -251,7 +224,7 @@ void CPlayer::Key_Input_Battle_Move(_double dTimeDelta)
 	{
 		m_isCool_MoveKey = false;
 
-		if(m_Moveset.m_isRestrict_Move == false)
+		if (m_Moveset.m_isRestrict_Move == false)
 			m_Moveset.m_Up_Battle_Run = true;
 	}
 
@@ -264,19 +237,19 @@ void CPlayer::Key_Input_Battle_Move(_double dTimeDelta)
 		else
 			m_Moveset.m_isPressing_While_Restrict = false;
 	}
-	
+
 
 	Safe_Release(pGameInstance);
 }
 
-void CPlayer::Key_Input_Battle_Jump(_double dTimeDelta)
+void CMonster::Key_Input_Battle_Jump(_double dTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	
 
-	if (false == m_Moveset.m_isRestrict_KeyInput && false == m_Moveset.m_isRestrict_Jump )
+
+	if (false == m_Moveset.m_isRestrict_KeyInput && false == m_Moveset.m_isRestrict_Jump)
 	{
 		if (pGameInstance->Get_DIKeyDown(DIK_K))
 		{
@@ -286,7 +259,7 @@ void CPlayer::Key_Input_Battle_Jump(_double dTimeDelta)
 				m_Moveset.m_Down_Battle_Jump = false;
 
 				Dir_Setting(false);
-				
+
 			}
 			else
 			{
@@ -303,9 +276,9 @@ void CPlayer::Key_Input_Battle_Jump(_double dTimeDelta)
 		if (pGameInstance->Get_DIKeyDown(DIK_J) && m_isFirst_JumpAtk)
 		{
 			//점프 트랙 공격 (이동키 + J키)
-			if ( pGameInstance->Get_DIKeyState(DIK_W) || pGameInstance->Get_DIKeyState(DIK_S) || pGameInstance->Get_DIKeyState(DIK_A) || pGameInstance->Get_DIKeyState(DIK_D))
+			if (pGameInstance->Get_DIKeyState(DIK_W) || pGameInstance->Get_DIKeyState(DIK_S) || pGameInstance->Get_DIKeyState(DIK_A) || pGameInstance->Get_DIKeyState(DIK_D))
 			{
-				if(false == m_Moveset.m_isRestrict_JumpCombo)	
+				if (false == m_Moveset.m_isRestrict_JumpCombo)
 					m_Moveset.m_Down_Battle_Jump_TrackAttack = true;
 				else
 					m_Moveset.m_Down_Battle_Jump_Attack = true;
@@ -315,7 +288,7 @@ void CPlayer::Key_Input_Battle_Jump(_double dTimeDelta)
 			{
 				m_Moveset.m_Down_Battle_Jump_Attack = true;
 			}
-			
+
 		}
 	}
 
@@ -323,7 +296,7 @@ void CPlayer::Key_Input_Battle_Jump(_double dTimeDelta)
 	Safe_Release(pGameInstance);
 }
 
-void CPlayer::Key_Input_Battle_Attack(_double dTimeDelta)
+void CMonster::Key_Input_Battle_Attack(_double dTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -356,7 +329,7 @@ void CPlayer::Key_Input_Battle_Attack(_double dTimeDelta)
 	Safe_Release(pGameInstance);
 }
 
-void CPlayer::Key_Input_Battle_ChargeAttack(_double dTimeDelta)
+void CMonster::Key_Input_Battle_ChargeAttack(_double dTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -396,14 +369,14 @@ void CPlayer::Key_Input_Battle_ChargeAttack(_double dTimeDelta)
 		{
 			m_Moveset.m_State_Battle_Charge = false;
 		}
-		
-		
+
+
 	}
 
 	Safe_Release(pGameInstance);
 }
 
-void CPlayer::Key_Input_Battle_Skill(_double dTimeDelta)
+void CMonster::Key_Input_Battle_Skill(_double dTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -430,7 +403,7 @@ void CPlayer::Key_Input_Battle_Skill(_double dTimeDelta)
 	Safe_Release(pGameInstance);
 }
 
-void CPlayer::Key_Input_Battle_Guard(_double dTimeDelta)
+void CMonster::Key_Input_Battle_Guard(_double dTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -465,7 +438,7 @@ void CPlayer::Key_Input_Battle_Guard(_double dTimeDelta)
 
 		if (pGameInstance->Get_DIKeyUp(DIK_O))
 		{
-			if (m_Moveset.m_isRestrict_Jump == false && m_Moveset.m_isRestrict_KeyInput == false)
+			if (m_Moveset.m_isRestrict_Jump == false)
 				m_Moveset.m_Up_Battle_Guard = true;
 		}
 	}
@@ -473,7 +446,7 @@ void CPlayer::Key_Input_Battle_Guard(_double dTimeDelta)
 	if (m_Moveset.m_isRestrict_Throw == false)
 	{
 		//잡기공격 ( O키 + J키)
-		if (pGameInstance->Get_DIKeyState(DIK_O) )
+		if (pGameInstance->Get_DIKeyState(DIK_O))
 		{
 			if (pGameInstance->Get_DIKeyDown(DIK_J))
 				m_Moveset.m_Down_Battle_Throw = true;
@@ -481,23 +454,23 @@ void CPlayer::Key_Input_Battle_Guard(_double dTimeDelta)
 				m_Moveset.m_Down_Battle_Push = true;
 		}
 	}
-	
+
 	if (m_isMaintain_Guard)
 	{
 		m_isMaintain_Guard = false;
 		m_isThrowing = false;
 
-		if(pGameInstance->Get_DIKeyState(DIK_O))
+		if (pGameInstance->Get_DIKeyState(DIK_O))
 			m_Moveset.m_Down_Battle_Guard = true;
 	}
 
 
-	
+
 
 	Safe_Release(pGameInstance);
 }
 
-void CPlayer::Key_Input_Battle_Dash(_double dTimeDelta)
+void CMonster::Key_Input_Battle_Dash(_double dTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -515,10 +488,8 @@ void CPlayer::Key_Input_Battle_Dash(_double dTimeDelta)
 		//스텝
 		if (pGameInstance->Get_DIKeyState(DIK_W) || pGameInstance->Get_DIKeyState(DIK_S) || pGameInstance->Get_DIKeyState(DIK_A) || pGameInstance->Get_DIKeyState(DIK_D))
 		{
-			if (m_Moveset.m_isRestrict_DoubleStep == false)
+			if (m_Moveset.m_isRestrict_Step == false)
 			{
-				if (pGameInstance->Get_DIKeyState(DIK_W) && m_Moveset.m_isRestrict_Step == false)
-				{
 				Dir_Setting(true);
 				XMStoreFloat4(&m_vLook, vLook);
 				m_Moveset.m_Down_Battle_Step = true;
@@ -530,12 +501,8 @@ void CPlayer::Key_Input_Battle_Dash(_double dTimeDelta)
 					m_isLeft = false;
 					m_isRight = false;
 				}
-				else if (pGameInstance->Get_DIKeyState(DIK_S) && m_Moveset.m_isRestrict_Step == false)
+				else if (pGameInstance->Get_DIKeyState(DIK_S))
 				{
-					Dir_Setting(true);
-					XMStoreFloat4(&m_vLook, vLook);
-					m_Moveset.m_Down_Battle_Step = true;
-
 					m_isForward = false;
 					m_isBack = true;
 					m_isLeft = false;
@@ -543,11 +510,6 @@ void CPlayer::Key_Input_Battle_Dash(_double dTimeDelta)
 				}
 				else if (pGameInstance->Get_DIKeyState(DIK_A))
 				{
-					Dir_Setting(true);
-					XMStoreFloat4(&m_vLook, vLook);
-
-					m_Moveset.m_Down_Battle_Step = true;
-
 					m_isForward = false;
 					m_isBack = false;
 					m_isLeft = true;
@@ -555,10 +517,6 @@ void CPlayer::Key_Input_Battle_Dash(_double dTimeDelta)
 				}
 				else if (pGameInstance->Get_DIKeyState(DIK_D))
 				{
-					Dir_Setting(true);
-					XMStoreFloat4(&m_vLook, vLook);
-					m_Moveset.m_Down_Battle_Step = true;
-
 					m_isForward = false;
 					m_isBack = false;
 					m_isLeft = false;
@@ -580,101 +538,46 @@ void CPlayer::Key_Input_Battle_Dash(_double dTimeDelta)
 	Safe_Release(pGameInstance);
 }
 
-void CPlayer::Key_Input_Battle_Awaken(_double dTimeDelta)
-{
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
 
-	if (m_Moveset.m_iAwaken != 0)
-	{
-		m_Moveset.m_dTime_Awaken_Duration -= dTimeDelta;
-
-		if (m_Moveset.m_dTime_Awaken_Duration <= 0.0)
-		{
-			m_Moveset.m_dTime_Awaken_Duration = 10.0;
-			m_Moveset.m_iAwaken = 0;
-		}
-	}
-
-	if (pGameInstance->Get_DIKeyDown(DIK_Q))
-	{
-		m_Moveset.m_Down_Battle_Awaken = true;
-
-		if (m_Moveset.m_iAwaken == 0)
-		{
-			m_Moveset.m_iAwaken = 1;
-			m_Moveset.m_dTime_Awaken_Duration = 10.0;
-		}
-		else if (m_Moveset.m_iAwaken == 1)
-		{
-			m_Moveset.m_iAwaken = 2;
-			m_Moveset.m_dTime_Awaken_Duration = 10.0;
-		}
-	}
-
-
-	Safe_Release(pGameInstance);
-}
-
-void CPlayer::Key_Input_Battle_Special(_double dTimeDelta)
-{
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	if (m_Moveset.m_isRestrict_Special == false)
-	{
-		if (m_Moveset.m_isRestrict_Step == false)
-		{
-			if (pGameInstance->Get_DIKeyDown(DIK_E))
-			{
-				m_Moveset.m_Down_Battle_Special = true;
-			}
-		}
-	}
-
-	Safe_Release(pGameInstance);
-}
-
-
-HRESULT CPlayer::Add_Components()
+HRESULT CMonster::Add_Components()
 {
 
 	return S_OK;
 }
 
-HRESULT CPlayer::SetUp_ShaderResources()
+HRESULT CMonster::SetUp_ShaderResources()
 {
 
 	return S_OK;
 }
 
-CPlayer* CPlayer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CMonster* CMonster::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	CPlayer* pInstance = new CPlayer(pDevice, pContext);
+	CMonster* pInstance = new CMonster(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CPlayer");
+		MSG_BOX("Failed to Created : CMonster");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CPlayer::Clone(void* pArg)
+CGameObject* CMonster::Clone(void* pArg)
 {
-	CPlayer* pInstance = new CPlayer(*this);
+	CMonster* pInstance = new CMonster(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CPlayer");
+		MSG_BOX("Failed to Cloned : CMonster");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CPlayer::Free()
+void CMonster::Free()
 {
 	__super::Free();
 }

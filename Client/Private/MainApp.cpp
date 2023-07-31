@@ -2,6 +2,8 @@
 #include "..\Public\MainApp.h"
 #include "GameInstance.h"
 #include "Level_Loading.h"
+#include "AtkCollManager.h"
+#include "ColliderManager.h"
 
 #include "SoundMgr.h"
 
@@ -131,16 +133,19 @@ HRESULT CMainApp::Render()
 				return E_FAIL;
 		}
 
-		if (FAILED(m_pGameInstance->Draw_Font(TEXT("Font_KR"), TEXT("Num0 To OnOff StaticCam"), _float2(0.f, 640.f), _float2(0.5f, 0.5f))))
+		if (FAILED(m_pGameInstance->Draw_Font(TEXT("Font_KR"), TEXT("Num0 To OnOff StaticCam"), _float2(0.f, 620.f), _float2(0.5f, 0.5f))))
 			return E_FAIL;
 
-		if (FAILED(m_pGameInstance->Draw_Font(TEXT("Font_KR"), TEXT("Num9 To OnOff LockMouse"), _float2(0.f, 660.f), _float2(0.5f, 0.5f))))
+		if (FAILED(m_pGameInstance->Draw_Font(TEXT("Font_KR"), TEXT("Num9 To OnOff LockMouse"), _float2(0.f, 640.f), _float2(0.5f, 0.5f))))
 			return E_FAIL;
 
-		if (FAILED(m_pGameInstance->Draw_Font(TEXT("Font_KR"), TEXT("F7 To OnOff FPS"), _float2(0.f, 680.f), _float2(0.5f, 0.5f))))
+		if (FAILED(m_pGameInstance->Draw_Font(TEXT("Font_KR"), TEXT("F6 To OnOff FPS"), _float2(0.f, 660.f), _float2(0.5f, 0.5f))))
 			return E_FAIL;
 
-		if (FAILED(m_pGameInstance->Draw_Font(TEXT("Font_KR"), TEXT("F8 To OnOff RenderDebug"), _float2(0.f, 700.f), _float2(0.5f, 0.5f))))
+		if (FAILED(m_pGameInstance->Draw_Font(TEXT("Font_KR"), TEXT("F7 To OnOff RenderDebut"), _float2(0.f, 680.f), _float2(0.5f, 0.5f))))
+			return E_FAIL;
+
+		if (FAILED(m_pGameInstance->Draw_Font(TEXT("Font_KR"), TEXT("F8 To OnOff RenderTarget"), _float2(0.f, 700.f), _float2(0.5f, 0.5f))))
 			return E_FAIL;
 
 	}
@@ -215,8 +220,12 @@ void CMainApp::Key_Input(_double dTimeDelta)
 		}
 	}
 
-	if (m_pGameInstance->Get_DIKeyDown(DIK_F7))
+
+	if (m_pGameInstance->Get_DIKeyDown(DIK_F6))
 		m_isRenderFPS = !m_isRenderFPS;
+
+	if (m_pGameInstance->Get_DIKeyDown(DIK_F7))
+		m_pRenderer->OnOff_RenderDebug();
 
 	if (m_pGameInstance->Get_DIKeyDown(DIK_F8))
 		m_pRenderer->OnOff_RenderTarget();
@@ -418,6 +427,8 @@ void CMainApp::Free()
 
 	CSoundMgr::Get_Instance()->StopAll();
 
+	CAtkCollManager::GetInstance()->DestroyInstance();
+	CColliderManager::GetInstance()->DestroyInstance();
 	CSoundMgr::Get_Instance()->Destroy_Instance();
 	CGameInstance::Release_Engine();
 }

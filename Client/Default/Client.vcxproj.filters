@@ -145,6 +145,12 @@
     <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Sup_Bar\Frame">
       <UniqueIdentifier>{75cdf47c-c18e-49a1-b217-8c15b666530c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\AtkCollider">
+      <UniqueIdentifier>{7f94dad7-d326-47f1-b06d-c52075fed801}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\AtkCollider\Manager">
+      <UniqueIdentifier>{a04c8a4e-c42a-466e-b952-271e7df79043}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -258,6 +264,15 @@
     <ClInclude Include="..\Public\Player_Battle_Combo.h">
       <Filter>02. GameObjects\UI\02.Combo_Info\Combo</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Monster.h">
+      <Filter>02. GameObjects\Character\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AtkCollider.h">
+      <Filter>02. GameObjects\AtkCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AtkCollManager.h">
+      <Filter>02. GameObjects\AtkCollider\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -358,6 +373,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\Player_Battle_Combo.cpp">
       <Filter>02. GameObjects\UI\02.Combo_Info\Combo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster.cpp">
+      <Filter>02. GameObjects\Character\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AtkCollider.cpp">
+      <Filter>02. GameObjects\AtkCollider</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AtkCollManager.cpp">
+      <Filter>02. GameObjects\AtkCollider\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

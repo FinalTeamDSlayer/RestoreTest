@@ -24,8 +24,8 @@ public:
 		return m_isDead;
 	}
 
-	void Set_Dead() {			//昏力贸府侩
-		m_isDead = true;
+	void Set_Dead(_bool isDead = true) {			//昏力贸府侩
+		m_isDead = isDead;
 	}
 
 public:

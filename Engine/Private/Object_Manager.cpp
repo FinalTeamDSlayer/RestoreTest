@@ -60,9 +60,9 @@ HRESULT CObject_Manager::Add_Prototype(const _tchar* pPrototypeTag, CGameObject*
 	return S_OK;
 }
 
-HRESULT CObject_Manager::Add_GameObject(_uint iLevelIndex, const _tchar* pLayerTag, const _tchar* pPrototypeTag, void* pArg)
+HRESULT CObject_Manager::Add_GameObject(_uint iLevelIndex, const _tchar* pLayerTag, const _tchar* pPrototypeTag, void* pArg, _bool isKeep)
 {
-	if (nullptr == m_pLayers)
+ 	if (nullptr == m_pLayers)
 		return E_FAIL;
 
 	CGameObject* pPrototype = Find_Prototype(pPrototypeTag);
@@ -77,7 +77,35 @@ HRESULT CObject_Manager::Add_GameObject(_uint iLevelIndex, const _tchar* pLayerT
 
 	if(nullptr == pLayer)
 	{
-		pLayer = CLayer::Create();
+		pLayer = CLayer::Create(isKeep);
+		if (nullptr == pLayer)
+			return E_FAIL;
+		 
+		if (FAILED(pLayer->Add_GameObject(pGameObject)))
+			return E_FAIL;
+
+		m_pLayers[iLevelIndex].emplace(pLayerTag, pLayer);
+	}
+	else
+	{
+		pLayer->Set_Keep(isKeep);
+		if (FAILED(pLayer->Add_GameObject(pGameObject)))
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+HRESULT CObject_Manager::Add_GameObject(_uint iLevelIndex, const _tchar* pLayerTag, CGameObject* pGameObject, _bool isKeep)
+{
+	if (nullptr == pGameObject)
+		return E_FAIL;
+
+	CLayer* pLayer = Find_Layer(iLevelIndex, pLayerTag);
+
+	if (nullptr == pLayer)
+	{
+		pLayer = CLayer::Create(isKeep);
 		if (nullptr == pLayer)
 			return E_FAIL;
 

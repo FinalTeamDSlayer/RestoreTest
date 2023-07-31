@@ -44,6 +44,13 @@ void CCollider::ReMake_Collider(_float fRadius)
 	m_pSphere[DATA_ORIGIN]->Radius = fRadius;
 }
 
+void CCollider::ReMake_Collider(_float3 vCenter, _float fRadius, _fmatrix TransformMatrix)
+{
+	m_pSphere[DATA_ORIGIN]->Center = vCenter;
+	m_pSphere[DATA_ORIGIN]->Radius = fRadius;
+	m_pSphere[DATA_ORIGIN]->Transform(*m_pSphere[DATA_CURRENT], TransformMatrix);
+}
+
 HRESULT CCollider::Initialize_Prototype(TYPE eColliderType)
 {
 	m_eColliderType = eColliderType;
@@ -191,6 +198,27 @@ _bool CCollider::Intersect(CCollider* pTargetCollider)
 	pTargetCollider->m_isColl = m_isColl;
 
 	return m_isColl;
+}
+
+_vector CCollider::ComputePushVec(CCollider* pTargetCollider)
+{
+	_vector vSourCenter = Convert::ToVector(m_pSphere[DATA_CURRENT]->Center);
+	_vector vDestCenter = Convert::ToVector(pTargetCollider->m_pSphere[DATA_CURRENT]->Center);
+
+	_float fRadius = m_pSphere[DATA_CURRENT]->Radius + pTargetCollider->m_pSphere[DATA_CURRENT]->Radius;
+
+	_vector vDir = vDestCenter - vSourCenter;
+
+	_float fDis = Convert::GetLength(vDir);
+
+	_float fScale = fRadius - fDis;
+
+	if (0.f < fScale)
+	{
+		return (XMVector3Normalize(vDir) * fScale);
+	}
+
+	return (XMVector3Normalize(vDir) * 0.f);
 }
 
 _matrix CCollider::Remove_Rotation(_fmatrix TransformMatrix)

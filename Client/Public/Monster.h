@@ -9,24 +9,13 @@ END
 
 BEGIN(Client)
 
-class CPlayer : public CCharacter
+class CMonster : public CCharacter
 {
 public:
 	typedef struct tagPlayerMoveset
 	{
 		//입력 방향
 		_float4	 m_Input_Dir = { 0.f, 0.f, 0.f, 0.f };
-
-		//각성 상태 파악  0:노말, 1:개방, 2:완전개방
-		_int	m_iAwaken = { 0 };
-		_double		m_dTime_Awaken_Duration = { 10.0 };
-
-		// 피격처리
-		_bool	m_Down_Dmg_Small = { false };
-		_bool	m_Down_Dmg_Blow = { false };
-		_bool	m_Down_Dmg_Spin = { false };
-		_bool	m_Down_Dmg_Bound = { false };
-		_bool	m_Down_Dmg_Great_Blow = { false };
 
 		// 제한
 		_bool	m_isRestrict_KeyInput = { false };
@@ -37,12 +26,6 @@ public:
 		_bool	m_isRestrict_Charge = { false };
 		_bool	m_isRestrict_Dash = { false };
 		_bool	m_isRestrict_Step = { false };
-		_bool	m_isRestrict_DoubleStep = { false };
-		_bool	m_isRestrict_Special = { false };
-
-		//히트모션 제한
-		_bool	m_isHitMotion = { false };
-
 
 		//달리기 키인풋
 		_bool	m_State_Battle_Run = { false };
@@ -89,17 +72,12 @@ public:
 		// 스텝 키인풋
 		_bool	m_Down_Battle_Step = { false };
 
-		// 개방 키인풋
-		_bool	m_Down_Battle_Awaken = { false };
-
-		//스페셜 오의 키인풋 
-		_bool	m_Down_Battle_Special = { false };
 	}PLAYERMOVESET;
 
 protected:
-	CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CPlayer(const CPlayer& rhs);
-	virtual ~CPlayer() = default;
+	CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CMonster(const CMonster& rhs);
+	virtual ~CMonster() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype();
@@ -113,7 +91,6 @@ public:
 protected: //애니메이션 제어용 함수들
 	void	Dir_Setting(_bool Reverse);
 
-	void	Trigger_Hit(_double dTimeDelta);
 	void	Key_Input(_double dTimeDelta);
 	void	Key_Input_Battle_Move(_double dTimeDelta);
 	void	Key_Input_Battle_Jump(_double dTimeDelta);
@@ -122,14 +99,11 @@ protected: //애니메이션 제어용 함수들
 	void	Key_Input_Battle_Skill(_double dTimeDelta);
 	void	Key_Input_Battle_Guard(_double dTimeDelta);
 	void	Key_Input_Battle_Dash(_double dTimeDelta);
-	void	Key_Input_Battle_Awaken(_double dTimeDelta);
-	void	Key_Input_Battle_Special(_double dTimeDelta);
-	
+
+
 
 protected: // 애니메이션 제어용 변수들
 	PLAYERMOVESET  m_Moveset;
-
-	_bool	m_isSpecialHit = { false };
 
 	//쿨타임 적용
 	_bool		m_isCool_MoveKey = { false };
@@ -177,7 +151,7 @@ protected:
 	HRESULT	SetUp_ShaderResources();
 
 public:
-	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CMonster* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };

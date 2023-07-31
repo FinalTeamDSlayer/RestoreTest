@@ -3,6 +3,8 @@
 
 #include "GameInstance.h"
 
+#include "AtkCollManager.h"
+
 CAtkCollider::CAtkCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject(pDevice, pContext)
 {
@@ -11,6 +13,22 @@ CAtkCollider::CAtkCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 CAtkCollider::CAtkCollider(const CAtkCollider& rhs)
 	: CGameObject(rhs)
 {
+}
+
+void CAtkCollider::Reset_AtkCollider(ATKCOLLDESC* pAtkCollDesc)
+{
+	if (nullptr != m_pTransformCom)
+		Safe_Release(m_pTransformCom);
+
+	ZeroMemory(&m_AtkCollDesc, sizeof m_AtkCollDesc);
+
+	m_AtkCollDesc = *pAtkCollDesc;
+	m_pTransformCom = m_AtkCollDesc.pTransform;
+	Safe_AddRef(m_pTransformCom);
+
+	m_pColliderCom->ReMake_Collider(m_AtkCollDesc.ColliderDesc.vPosition, m_AtkCollDesc.ColliderDesc.vSize.x, m_pTransformCom->Get_WorldMatrix());
+	Set_Dead(false);
+	m_dTimeAcc = 0.0;
 }
 
 HRESULT CAtkCollider::Initialize_Prototype()
@@ -23,6 +41,13 @@ HRESULT CAtkCollider::Initialize_Prototype()
 
 HRESULT CAtkCollider::Initialize(void* pArg)
 {
+	if (nullptr == pArg)
+		return E_FAIL;
+
+	memcpy(&m_AtkCollDesc, pArg, sizeof m_AtkCollDesc);
+	m_pTransformCom = m_AtkCollDesc.pTransform;
+	Safe_AddRef(m_pTransformCom);
+
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
@@ -38,11 +63,22 @@ void CAtkCollider::Tick(_double dTimeDelta)
 		return;
 
 	__super::Tick(dTimeDelta);
+
+	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
+
+	m_dTimeAcc += dTimeDelta;
 }
 
 void CAtkCollider::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
+
+	if (m_AtkCollDesc.dLifeTime < m_dTimeAcc)
+	{
+		CAtkCollManager::GetInstance()->Collect_Collider(this);
+		m_dTimeAcc = 0.0;
+		Set_Dead();
+	}
 
 #ifdef _DEBUG
 	if (FAILED(m_pRendererCom->Add_DebugGroup(m_pColliderCom)))
@@ -62,7 +98,7 @@ HRESULT CAtkCollider::Add_Components()
 {
 	/* for.Com_Sphere */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_Sphere"),
-		TEXT("Com_Sphere"), (CComponent**)&m_pColliderCom)))
+		TEXT("Com_Sphere"), (CComponent**)&m_pColliderCom, &m_AtkCollDesc.ColliderDesc)))
 	{
 		MSG_BOX("Failed to Add_Com_Sphere : CAtkCollider");
 		return E_FAIL;

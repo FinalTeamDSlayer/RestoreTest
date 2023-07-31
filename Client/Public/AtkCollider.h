@@ -15,10 +15,22 @@ BEGIN(Client)
 
 class CAtkCollider final : public CGameObject
 {
+public:
+	typedef struct tagAtkCollDesc
+	{
+		CTransform* pTransform = { nullptr };
+		CCollider::COLLIDERDESC ColliderDesc;
+		_double		dLifeTime = { 0.0 };
+
+		_float		fDamage = { 0.0 };
+	}ATKCOLLDESC;
 private:
 	CAtkCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CAtkCollider(const CAtkCollider& rhs);
 	virtual ~CAtkCollider() = default;
+
+public:
+	void Reset_AtkCollider(ATKCOLLDESC* pAtkCollDesc);
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -30,6 +42,10 @@ public:
 private:
 	CTransform* m_pTransformCom = { nullptr };
 	CCollider* m_pColliderCom = { nullptr };
+
+private:
+	ATKCOLLDESC		m_AtkCollDesc;
+	_double			m_dTimeAcc = { 0.0 };
 
 #ifdef _DEBUG
 private:

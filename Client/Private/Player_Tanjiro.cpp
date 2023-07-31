@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "SoundMgr.h"
 
+#include "AtkCollManager.h"
 
 CPlayer_Tanjiro::CPlayer_Tanjiro(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPlayer(pDevice, pContext)
@@ -59,10 +60,9 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 	//이벤트 콜
 	EventCall_Control(dTimeDelta);
-
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
-		return;
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
+		return;
+	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
 }
 
@@ -129,12 +129,14 @@ HRESULT CPlayer_Tanjiro::Render_ShadowDepth()
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	/*CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
 
 	_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	_vector	vLightEye = XMVectorSet(-5.f, 10.f, -5.f, 1.f);
+	_vector	vLightEye = vPlayerPos + XMVectorSet(-5.f, 10.f, -5.f, 1.f);*/
+	_vector	vLightEye = XMVectorSet(130.f, 10.f, 140.f, 1.f);
 	_vector	vLightAt = XMVectorSet(60.f, 0.f, 60.f, 1.f);
 	_vector	vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
 
@@ -194,20 +196,20 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
-				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
-				CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
-			}
+			_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
+			CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
+		}
 
 		}
 		if (22 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
-				_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
-				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
-				CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
-			}
+			_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
+			CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
+		}
 			else if (1 == m_iEvent_Index)
 			{
 				_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
@@ -220,19 +222,19 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
-				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
-				CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
-			}
+			_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
+			CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
+		}
 		}
 		if (25 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
-				_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
-				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
-				CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
-			}
+			_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
+			CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
+		}
 		}
 		if (ANIM_ATK_SPECIAL_CUTSCENE == m_pModelCom->Get_iCurrentAnimIndex())
 		{
@@ -253,24 +255,24 @@ void CPlayer_Tanjiro::Animation_Control(_double dTimeDelta)
 
 	if (m_Moveset.m_isHitMotion == false)
 	{
-		Animation_Control_Battle_Jump(dTimeDelta);
+	Animation_Control_Battle_Jump(dTimeDelta);
 
-		Animation_Control_Battle_Move(dTimeDelta);
+	Animation_Control_Battle_Move(dTimeDelta);
 
-		Animation_Control_Battle_Attack(dTimeDelta);
+	Animation_Control_Battle_Attack(dTimeDelta);
 
-		Animation_Control_Battle_Charge(dTimeDelta);
+	Animation_Control_Battle_Charge(dTimeDelta);
 
-		Animation_Control_Battle_Skill(dTimeDelta);
+	Animation_Control_Battle_Skill(dTimeDelta);
 
-		Animation_Control_Battle_Guard(dTimeDelta);
+	Animation_Control_Battle_Guard(dTimeDelta);
 
-		Animation_Control_Battle_Dash(dTimeDelta);
+	Animation_Control_Battle_Dash(dTimeDelta);
 
 		Animation_Control_Battle_Awaken(dTimeDelta);
 
 		Animation_Control_Battle_Special(dTimeDelta);
-	}
+}
 }
 
 void CPlayer_Tanjiro::Animation_Control_Battle_Move(_double dTimeDelta)
@@ -424,6 +426,22 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Attack(_double dTimeDelta)
 				}
 			}
 		}
+
+		//=======================AtkCollTest=======================
+
+		CAtkCollider::ATKCOLLDESC AtkCollDesc;
+		ZeroMemory(&AtkCollDesc, sizeof AtkCollDesc);
+
+		AtkCollDesc.ColliderDesc.vSize = _float3(3.f, 1.f, 1.f);
+		AtkCollDesc.ColliderDesc.vPosition = _float3(0.f, 0.f, 0.f);
+
+		AtkCollDesc.dLifeTime = 1.0;
+
+		AtkCollDesc.pTransform = m_pTransformCom;
+
+		CAtkCollManager::GetInstance()->Reuse_Collider(TEXT("Layer_PlayerAtk"), &AtkCollDesc);
+
+		//=========================================================
 	}
 	// 공격 모션별 전진이동 제어 (Timedelta, 애니메이션인덱스,  초기화속도,  감속도)
 	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_COMBO, 3.0f, 0.3f);
@@ -578,7 +596,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 				if (m_pModelCom->Get_Combo_Doing() == false)
 				{
 					m_pModelCom->Set_Combo_Doing(true);
-					m_pModelCom->Set_Animation(ANIM_BATTLE_STEP_L);
+			m_pModelCom->Set_Animation(ANIM_BATTLE_STEP_L);
 				}
 				//아닐경우, 다음 콤보로 진행
 				else
@@ -587,14 +605,14 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 					Jumping(3.0f, 0.25f);
 				}
 			}
-			else if (m_isRight)
+		else if (m_isRight)
 			{
 				//콤보 첫 애니메이션 설정
 				if (m_pModelCom->Get_Combo_Doing() == false)
 				{
 					m_pModelCom->Set_Combo_Doing(true);
-					m_pModelCom->Set_Animation(ANIM_BATTLE_STEP_R);
-				}
+			m_pModelCom->Set_Animation(ANIM_BATTLE_STEP_R);
+	}
 				//아닐경우, 다음 콤보로 진행
 				else
 				{

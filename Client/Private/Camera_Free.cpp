@@ -132,23 +132,23 @@ void CCamera_Free::FreeCamera(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Get_DIKeyState(DIK_W) & 0x80)
+	if (pGameInstance->Get_DIKeyState(DIK_UP) & 0x80)
 		m_pTransformCom->Go_Straight(dTimeDelta);
 
-	if (pGameInstance->Get_DIKeyState(DIK_S) & 0x80)
+	if (pGameInstance->Get_DIKeyState(DIK_DOWN) & 0x80)
 		m_pTransformCom->Go_Backward(dTimeDelta);
 
-	if (pGameInstance->Get_DIKeyState(DIK_A) & 0x80)
+	if (pGameInstance->Get_DIKeyState(DIK_LEFT) & 0x80)
 		m_pTransformCom->Go_Left(dTimeDelta);
 
-	if (pGameInstance->Get_DIKeyState(DIK_D) & 0x80)
+	if (pGameInstance->Get_DIKeyState(DIK_RIGHT) & 0x80)
 		m_pTransformCom->Go_Right(dTimeDelta);
 
 	// Camera_Shake
 	if (pGameInstance->Get_DIKeyDown(DIK_LCONTROL))
 		Shake(1.f, 500);
 
-	_long MouseMove = { 0 };
+		_long MouseMove = { 0 };
 
 	if (MouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::DIMS_X))
 	{

@@ -450,8 +450,6 @@ Engine/Bin/*
 !Tool/Bin
 Tool/Bin/*
 
-
-
 ### VisualStudio Patch ###
 # Additional files built by Visual Studio
 

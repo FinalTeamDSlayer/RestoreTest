@@ -189,6 +189,11 @@ namespace Engine
 		{
 			return XMVectorSetW(_vVec, XMVectorGetW(_vVec) + _fW);
 		}
+
+		static float GetLength(FXMVECTOR _vVec)
+		{
+			return XMVectorGetX(XMVector3Length(_vVec));
+		}
 	};
 
 	

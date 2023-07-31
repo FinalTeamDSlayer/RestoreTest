@@ -16,6 +16,8 @@
 #include "Player_Battle_Combo.h"
 #include "Player_Battle_Ult_Effect.h"
 
+#include "ColliderManager.h"
+
 CLevel_FinalBoss::CLevel_FinalBoss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
 {
@@ -45,11 +47,11 @@ HRESULT CLevel_FinalBoss::Initialize()
 		return E_FAIL;
 	}
 
-   /* if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+    if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
     {
         MSG_BOX("Failed to Ready_Layer_Camera : CLevel_GamePlay");
         return E_FAIL;
-    }*/
+    }
 
     if (FAILED(Ready_Layer_MapObject(TEXT("Layer_MapObject"))))
     {
@@ -82,6 +84,8 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 {
     __super::Tick(dTimeDelta);
     SetWindowText(g_hWnd, TEXT("FinalBoss"));
+
+	CColliderManager::GetInstance()->Check_Collider(LEVEL_FINALBOSS, dTimeDelta);
 
     if (GetKeyState(VK_RETURN) & 0x8000)
     {
@@ -118,15 +122,15 @@ HRESULT CLevel_FinalBoss::Ready_Lights()
 
     LightDesc.eType = LIGHTDESC::TYPE_DIRECTION;
     LightDesc.vLightDir         = _float4(1.f, -1.f, 1.f, 0.f);
-    LightDesc.vLightDiffuse     = _float4(1.f, 1.f, 1.f, 1.f);
-    LightDesc.vLightAmbient     = _float4(1.f, 1.f, 1.f, 1.f);
+    LightDesc.vLightDiffuse     = _float4(0.5f, 0.5f, 0.5f, 0.5f);
+    LightDesc.vLightAmbient     = _float4(0.5f, 0.5f, 0.5f, 1.f);
     LightDesc.vLightSpecular    = _float4(1.f, 1.f, 1.f, 1.f);
 
-    if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
+  /*  if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
     {
         MSG_BOX("Failed to Add_GameObject : Direction_Light");
         return E_FAIL;
-    }
+    }*/
 
     Safe_Release(pGameInstance);
 
@@ -240,7 +244,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Monster(const _tchar* pLayerTag)
 
     CharacterDesc.WorldInfo.vScale = _float3(1.f, 1.f, 1.f);
     CharacterDesc.WorldInfo.fDegree = 0.f;
-    CharacterDesc.WorldInfo.vPosition = _float4(130.f, 0.f, 140.f, 1.f);
+    CharacterDesc.WorldInfo.vPosition = _float4(140.f, 0.f, 120.f, 1.f);
 
     CharacterDesc.TransformDesc.dSpeedPerSec = 5.0;
     CharacterDesc.TransformDesc.dRadianRotationPerSec = (_double)XMConvertToRadians(90.f);
@@ -264,6 +268,20 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Monster(const _tchar* pLayerTag)
         MSG_BOX("Failed to Add_GameObject : CLevel_GamePlay");
         return E_FAIL;
     }
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,
+		TEXT("Prototype_GameObject_Monster_Test"), &CharacterDesc)))
+	{
+		MSG_BOX("Failed to Add_GameObject : CLevel_GamePlay");
+		return E_FAIL;
+	}
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,
+		TEXT("Prototype_GameObject_Monster_Test"), &CharacterDesc)))
+	{
+		MSG_BOX("Failed to Add_GameObject : CLevel_GamePlay");
+		return E_FAIL;
+	}
 
     Safe_Release(pGameInstance);
 

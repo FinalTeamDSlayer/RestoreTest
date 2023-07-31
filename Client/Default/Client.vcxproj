@@ -178,6 +178,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\AtkCollider.h" />
+    <ClInclude Include="..\Public\AtkCollManager.h" />
     <ClInclude Include="..\Public\BackGround.h" />
     <ClInclude Include="..\Public\Boss_Battle_Frame.h" />
     <ClInclude Include="..\Public\Boss_Battle_Hp.h" />
@@ -196,6 +197,7 @@
     <ClInclude Include="..\Public\Loader.h" />
     <ClInclude Include="..\Public\MainApp.h" />
     <ClInclude Include="..\Public\MapObject.h" />
+    <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\Monster_Test.h" />
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\Public\Player_Battle_Combo.h" />
@@ -218,6 +220,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\AtkCollider.cpp" />
+    <ClCompile Include="..\Private\AtkCollManager.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
     <ClCompile Include="..\Private\Boss_Battle_Frame.cpp" />
     <ClCompile Include="..\Private\Boss_Battle_Hp.cpp" />
@@ -235,6 +238,7 @@
     <ClCompile Include="..\Private\Loader.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="..\Private\MapObject.cpp" />
+    <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\Monster_Test.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\Private\Player_Battle_Combo.cpp" />

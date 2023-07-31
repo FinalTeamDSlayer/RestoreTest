@@ -29,8 +29,10 @@ CGameObject* CLayer::Get_GameObject(_uint iIndex)
 	return (*iter);
 }
 
-HRESULT CLayer::Initialize()
+HRESULT CLayer::Initialize(_bool isKeep)
 {
+	m_isKeep = isKeep;
+
 	return S_OK;
 }
 
@@ -54,7 +56,9 @@ void CLayer::Tick(_double dTimeDelta)
 
 			if (true == (*iter)->Get_Dead())
 			{
-				Safe_Release((*iter));
+				if (false == m_isKeep)
+					Safe_Release((*iter));
+
 				iter = m_GameObjects.erase(iter);
 				continue;
 			}
@@ -77,11 +81,11 @@ void CLayer::Clear_Layer()
 	Free();
 }
 
-CLayer* CLayer::Create()
+CLayer* CLayer::Create(_bool isKeep)
 {
 	CLayer* pInstance = new CLayer();
 
-	if (FAILED(pInstance->Initialize()))
+	if (FAILED(pInstance->Initialize(isKeep)))
 	{
 		MSG_BOX("Failet to Created : CLayer");
 		Safe_Release(pInstance);

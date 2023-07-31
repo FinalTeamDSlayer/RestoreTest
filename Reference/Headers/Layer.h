@@ -17,7 +17,12 @@ public:
 	}
 
 public:
-	HRESULT		Initialize();
+	void Set_Keep(_bool isKeep) {
+		m_isKeep = isKeep;
+	}
+
+public:
+	HRESULT		Initialize(_bool isKeep);
 	HRESULT		Add_GameObject(class CGameObject* pGameObject);
 	void		Tick(_double dTimeDelta);
 	void		LateTick(_double dTimeDelta);
@@ -27,8 +32,9 @@ public:
 
 private:
 	list<class CGameObject*>	m_GameObjects;
+	_bool						m_isKeep = { false };
 public:
-	static CLayer* Create();
+	static CLayer* Create(_bool isKeep);
 	virtual void Free() override;
 };
 
