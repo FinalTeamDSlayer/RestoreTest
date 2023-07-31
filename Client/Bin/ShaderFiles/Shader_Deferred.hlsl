@@ -351,8 +351,6 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	vNewUV.x = (vUVPos.x / vUVPos.w) * 0.5f + 0.5f;
 	vNewUV.y = (vUVPos.y / vUVPos.w) * -0.5f + 0.5f;
 
-   
-
 	vector      vShadowDepthInfo = g_ShadowDepthTexture.Sample(ShadowDepthSampler, vNewUV);
 
 	/*if (vPosition.z - 0.1f > vShadowDepthInfo.r * 300.0f)
@@ -728,7 +726,6 @@ PS_OUT PS_SSAO_Test(PS_IN _In)
 	float4 vDepth = g_DepthTexture.Sample(DepthSampler, _In.vTexUV);
 
 
-   
 	//vNormal = float4(vNormal.xyz * 2.f - 1.f, 0.f);
 	if (vNormal.a != 0.f)
 	{

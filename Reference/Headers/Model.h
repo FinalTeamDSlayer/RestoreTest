@@ -36,6 +36,11 @@ public://Get
 	_uint Get_iCurrentAnimIndex() { return m_iCurrentAnimIndex; }
 
 
+	_bool	Get_AnimFinish(_int AnimIndex) {
+		
+		return m_Animations[AnimIndex]->Get_AnimationDesc().m_isFinish;
+		
+	}
 
 public://Set
 	void Set_Animation(_uint iAnimIndex) { m_iCurrentAnimIndex = iAnimIndex; }

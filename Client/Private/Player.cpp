@@ -519,64 +519,64 @@ void CPlayer::Key_Input_Battle_Dash(_double dTimeDelta)
 			{
 				if (pGameInstance->Get_DIKeyState(DIK_W) && m_Moveset.m_isRestrict_Step == false)
 				{
-				Dir_Setting(true);
-				XMStoreFloat4(&m_vLook, vLook);
-				m_Moveset.m_Down_Battle_Step = true;
-
-				if (pGameInstance->Get_DIKeyState(DIK_W))
-				{
-					m_isForward = true;
-					m_isBack = false;
-					m_isLeft = false;
-					m_isRight = false;
-				}
-				else if (pGameInstance->Get_DIKeyState(DIK_S) && m_Moveset.m_isRestrict_Step == false)
-				{
 					Dir_Setting(true);
 					XMStoreFloat4(&m_vLook, vLook);
 					m_Moveset.m_Down_Battle_Step = true;
 
-					m_isForward = false;
-					m_isBack = true;
-					m_isLeft = false;
-					m_isRight = false;
-				}
-				else if (pGameInstance->Get_DIKeyState(DIK_A))
-				{
-					Dir_Setting(true);
-					XMStoreFloat4(&m_vLook, vLook);
+					if (pGameInstance->Get_DIKeyState(DIK_W))
+					{
+						m_isForward = true;
+						m_isBack = false;
+						m_isLeft = false;
+						m_isRight = false;
+					}
+					else if (pGameInstance->Get_DIKeyState(DIK_S) && m_Moveset.m_isRestrict_Step == false)
+					{
+						Dir_Setting(true);
+						XMStoreFloat4(&m_vLook, vLook);
+						m_Moveset.m_Down_Battle_Step = true;
 
-					m_Moveset.m_Down_Battle_Step = true;
+						m_isForward = false;
+						m_isBack = true;
+						m_isLeft = false;
+						m_isRight = false;
+					}
+					else if (pGameInstance->Get_DIKeyState(DIK_A))
+					{
+						Dir_Setting(true);
+						XMStoreFloat4(&m_vLook, vLook);
 
-					m_isForward = false;
-					m_isBack = false;
-					m_isLeft = true;
-					m_isRight = false;
-				}
-				else if (pGameInstance->Get_DIKeyState(DIK_D))
-				{
-					Dir_Setting(true);
-					XMStoreFloat4(&m_vLook, vLook);
-					m_Moveset.m_Down_Battle_Step = true;
+						m_Moveset.m_Down_Battle_Step = true;
 
-					m_isForward = false;
-					m_isBack = false;
-					m_isLeft = false;
-					m_isRight = true;
+						m_isForward = false;
+						m_isBack = false;
+						m_isLeft = true;
+						m_isRight = false;
+					}
+					else if (pGameInstance->Get_DIKeyState(DIK_D))
+					{
+						Dir_Setting(true);
+						XMStoreFloat4(&m_vLook, vLook);
+						m_Moveset.m_Down_Battle_Step = true;
+
+						m_isForward = false;
+						m_isBack = false;
+						m_isLeft = false;
+						m_isRight = true;
+					}
 				}
 			}
-		}
-		//대시
-		else
-		{
-			if (m_Moveset.m_isRestrict_Dash == false)
+			//대시
+			else
 			{
-				XMStoreFloat4(&m_Moveset.m_Input_Dir, vLook);
-				m_Moveset.m_Down_Battle_Dash = true;
+				if (m_Moveset.m_isRestrict_Dash == false)
+				{
+					XMStoreFloat4(&m_Moveset.m_Input_Dir, vLook);
+					m_Moveset.m_Down_Battle_Dash = true;
+				}
 			}
 		}
 	}
-
 	Safe_Release(pGameInstance);
 }
 
